@@ -14,7 +14,6 @@
 
         body {
             margin: 0;
-            /* FONDO ANIMADO DEGRADADO */
             background: linear-gradient(-45deg, #f5e8d7, #ffdde1, #ee9ae5, #f5e8d7);
             background-size: 400% 400%;
             animation: gradientBG 15s ease infinite;
@@ -29,188 +28,191 @@
             100% { background-position: 0% 50%; }
         }
 
-        /* --- SECCIÓN 1: EL ÁRBOL --- */
-        .hero-section {
-            height: 100vh;
-            display: flex;
-            position: relative;
-            padding: 0 5%;
-            align-items: center;
-        }
-
-        .text-content { flex: 1; z-index: 10; }
-        .tree-content { flex: 1; display: flex; justify-content: center; align-items: center; }
-        #treeCanvas { max-width: 100%; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.1)); }
-        
-        h1 { font-size: 2.5rem; margin-bottom: 20px; font-weight: 500; }
-        .typewriter { font-size: 1.6rem; line-height: 1.5; min-height: 150px; }
-
-        .uptime-footer { position: absolute; bottom: 40px; left: 5%; }
-        .uptime-display { font-size: 2.2rem; font-weight: 700; color: #c9184a; }
-        .unit { font-size: 0.9rem; font-weight: 400; margin-right: 10px; color: var(--text-color); }
-
-        /* --- SECCIÓN 2: LÍNEA DE TIEMPO --- */
-        .timeline-section { padding: 80px 5%; background: rgba(255, 255, 255, 0.2); }
-        .timeline-title { text-align: center; font-family: 'Dancing Script', cursive; font-size: 3.5rem; margin-bottom: 50px; color: var(--accent); }
-        .timeline-scroll { display: flex; overflow-x: auto; gap: 30px; padding: 20px; scroll-behavior: smooth; }
-        .photo-card { min-width: 300px; background: white; padding: 15px 15px 40px 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); transform: rotate(var(--r)); transition: 0.3s; }
-        .photo-card img { width: 100%; height: 250px; object-fit: cover; }
-        .photo-date { font-family: 'Dancing Script', cursive; font-size: 1.8rem; text-align: center; margin-top: 15px; }
-
-        /* --- SECCIÓN 3: EL BOTÓN FINAL --- */
-        .final-call {
-            text-align: center;
-            padding: 100px 20px;
-        }
-
-        .btn-valentine {
-            background-color: var(--accent);
-            color: white;
-            border: none;
-            padding: 20px 40px;
-            font-size: 1.8rem;
-            font-family: 'Dancing Script', cursive;
-            border-radius: 50px;
-            cursor: pointer;
-            box-shadow: 0 10px 20px rgba(255, 77, 109, 0.3);
-            transition: transform 0.3s, background-color 0.3s;
-        }
-
-        .btn-valentine:hover {
-            transform: scale(1.1);
-            background-color: #c9184a;
-        }
-
-        /* --- VENTANA EMERGENTE (MODAL) --- */
-        .modal {
-            display: none;
+        /* PANTALLA DE ACCESO */
+        #splash-screen {
             position: fixed;
-            z-index: 1000;
-            left: 0; top: 0; width: 100%; height: 100%;
-            background-color: rgba(0,0,0,0.5);
-            backdrop-filter: blur(5px);
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--bg-color);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 1s ease;
         }
 
-        .modal-content {
-            background-color: var(--bg-color);
-            margin: 10% auto;
+        .auth-container {
+            text-align: center;
+            background: white;
             padding: 40px;
             border-radius: 20px;
-            width: 80%;
-            max-width: 500px;
-            text-align: center;
-            border: 3px solid var(--accent);
-            position: relative;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            width: 85%;
+            max-width: 400px;
         }
 
-        .modal-content h2 { font-family: 'Dancing Script', cursive; font-size: 3rem; color: var(--accent); }
-        .modal-content p { font-size: 1.2rem; line-height: 1.6; }
-        .close-btn { position: absolute; top: 15px; right: 20px; font-size: 1.5rem; cursor: pointer; }
+        input[type="text"] {
+            padding: 12px 20px;
+            border: 2px solid var(--accent);
+            border-radius: 25px;
+            width: 80%;
+            margin-bottom: 20px;
+            text-align: center;
+            outline: none;
+        }
+
+        .btn-auth {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 12px 40px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        /* CONTENIDO PRINCIPAL */
+        #main-content { display: none; }
+
+        .hero-section { height: 100vh; display: flex; position: relative; padding: 0 5%; align-items: center; }
+        .text-content { flex: 1; z-index: 10; }
+        .tree-content { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; position: relative; }
+        
+        #treeCanvas { max-width: 100%; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.1)); }
+        
+        /* DISEÑO DE LA PAREJA */
+        .couple-silhouette {
+            position: absolute;
+            bottom: -30px; /* Ajustado para quedar en la base del tronco */
+            width: 300px;
+            opacity: 0;
+            transition: opacity 2s ease-in-out;
+            fill: #5d4037; /* Color del tronco */
+        }
+
+        .typewriter { font-size: 1.6rem; line-height: 1.5; min-height: 150px; }
+        .uptime-display { font-size: 2.2rem; font-weight: 700; color: #c9184a; }
+        .unit { font-size: 0.9rem; margin-right: 10px; color: var(--text-color); }
+
+        .timeline-section { padding: 80px 5%; background: rgba(255, 255, 255, 0.2); }
+        .timeline-title { text-align: center; font-family: 'Dancing Script', cursive; font-size: 3.5rem; color: var(--accent); }
+        .timeline-scroll { display: flex; overflow-x: auto; gap: 30px; padding: 20px; }
+        .photo-card { min-width: 280px; background: white; padding: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); transform: rotate(var(--r)); }
+        .photo-card img { width: 100%; height: 250px; object-fit: cover; border-radius: 5px; }
+
+        .final-call { text-align: center; padding: 100px 20px; }
+        .btn-valentine { background-color: var(--accent); color: white; border: none; padding: 20px 40px; font-size: 1.8rem; font-family: 'Dancing Script', cursive; border-radius: 50px; cursor: pointer; }
+
+        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); backdrop-filter: blur(5px); }
+        .modal-content { background-color: var(--bg-color); margin: 15vh auto; padding: 40px; border-radius: 20px; width: 80%; max-width: 500px; text-align: center; border: 3px solid var(--accent); position: relative; }
 
         .falling-heart { position: fixed; top: -20px; z-index: 100; pointer-events: none; animation: fall linear forwards; }
         @keyframes fall { to { transform: translateY(105vh) rotate(360deg); } }
-
-        /* Botón de música opcional si no arranca solo */
-        .music-control {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 1001;
-            background: white;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            font-size: 20px;
-        }
+        
+        .shake { animation: shake 0.5s; }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-10px); } 75% { transform: translateX(10px); } }
     </style>
 </head>
 <body>
+
+    <div id="splash-screen">
+        <div class="auth-container" id="authBox">
+            <h2 style="font-family: 'Dancing Script', cursive; font-size: 2.2rem; color: var(--accent);">Solo para ti...</h2>
+            <p style="margin-bottom: 20px;">¿Cuál fue la fecha de nuestro primer beso?</p>
+            <input type="text" id="passInput" placeholder="Ej: 5/5/2020">
+            <br>
+            <button class="btn-auth" onclick="validarAcceso()">Descubrir Regalo</button>
+        </div>
+    </div>
 
     <audio id="bgMusic" loop>
         <source src="musica.mp3" type="audio/mpeg">
     </audio>
 
-    <div class="music-control" id="musicBtn" onclick="toggleMusic()">🎵</div>
-
-    <section class="hero-section">
-        <div class="text-content">
-            <h1>Para el amor de mi vida:</h1>
-            <div id="typewriter" class="typewriter"></div>
-            <div class="uptime-footer">
-                <div style="opacity:0.8; margin-bottom:5px;">Mi amor por ti comenzó hace...</div>
-                <div id="uptime" class="uptime-display"></div>
+    <div id="main-content">
+        <section class="hero-section">
+            <div class="text-content">
+                <h1 style="font-family: 'Dancing Script', cursive; font-size: 3rem;">Para el amor de mi vida:</h1>
+                <div id="typewriter" class="typewriter"></div>
+                <div style="margin-top: 50px;">
+                    <div style="opacity:0.8; margin-bottom:5px;">Mi amor por ti comenzó hace...</div>
+                    <div id="uptime" class="uptime-display"></div>
+                </div>
             </div>
-        </div>
-        <div class="tree-content">
-            <canvas id="treeCanvas"></canvas>
-        </div>
-    </section>
+            <div class="tree-content">
+                <canvas id="treeCanvas"></canvas>
+                <svg class="couple-silhouette" id="couple" viewBox="0 0 100 100">
+                    <path d="M35,90 Q35,70 45,70 Q55,70 55,90 M65,90 Q65,65 75,65 Q85,65 85,90" stroke-width="0"/>
+                    <circle cx="45" cy="65" r="5"/>
+                    <circle cx="75" cy="60" r="5"/>
+                    <path d="M40,70 L50,90 L30,90 Z M70,65 L80,90 L60,90 Z" />
+                </svg>
+            </div>
+        </section>
 
-    <section class="timeline-section">
-        <h2 class="timeline-title">Nuestra Historia...</h2>
-        <div class="timeline-scroll">
-            <div class="photo-card" style="--r: 3deg"><img src="febrero_25.jpg.jpeg"><div class="photo-date">Febrero 2025</div></div>
-            <div class="photo-card" style="--r: -1deg"><img src="marzo_25.jpg.jpeg"><div class="photo-date">Marzo 2025</div></div>
-            <div class="photo-card" style="--r: 1deg"><img src="abril_25.jpg.jpeg"><div class="photo-date">Abril 2025</div></div>
-            <div class="photo-card" style="--r: -2deg"><img src="mayo_25.jpg.jpeg"><div class="photo-date">Mayo 2025</div></div>
-            <div class="photo-card" style="--r: 2deg"><img src="junio_25.jpg.jpeg"><div class="photo-date">Junio 2025</div></div>
-            <div class="photo-card" style="--r: 3deg"><img src="julio_25.jpg.jpeg"><div class="photo-date">Julio 2025</div></div>
-            <div class="photo-card" style="--r: -1deg"><img src="agosto_25.jpg.jpeg"><div class="photo-date">Agosto 2025</div></div>
-            <div class="photo-card" style="--r: 1deg"><img src="sep_25.jpg.jpeg"><div class="photo-date">Septiembre 2025</div></div>
-            <div class="photo-card" style="--r: -1deg"><img src="octubre_25.jpg.jpeg"><div class="photo-date">Octubre 2025</div></div>
-            <div class="photo-card" style="--r: -2deg"><img src="nov_25.jpg.jpeg"><div class="photo-date">Noviembre 2025</div></div>
-            <div class="photo-card" style="--r: 2deg"><img src="dic_25.jpg.jpeg"><div class="photo-date">Diciembre 2025</div></div>
-            <div class="photo-card" style="--r: -3deg"><img src="enero_26.jpg.jpeg"><div class="photo-date">Enero 2026</div></div>
-            <div class="photo-card" style="--r: 3deg"><img src="febrero_26.jpg.jpeg"><div class="photo-date">Febrero 2026</div></div>
-        </div>
-    </section>
+        <section class="timeline-section">
+            <h2 class="timeline-title">Nuestra Historia...</h2>
+            <div class="timeline-scroll">
+                <div class="photo-card" style="--r: 3deg"><img src="febrero_25.jpg.jpeg"><div class="photo-date">Febrero 2025</div></div>
+                <div class="photo-card" style="--r: -1deg"><img src="marzo_25.jpg.jpeg"><div class="photo-date">Marzo 2025</div></div>
+                <div class="photo-card" style="--r: 1deg"><img src="abril_25.jpg.jpeg"><div class="photo-date">Abril 2025</div></div>
+                <div class="photo-card" style="--r: -2deg"><img src="mayo_25.jpg.jpeg"><div class="photo-date">Mayo 2025</div></div>
+                <div class="photo-card" style="--r: 2deg"><img src="junio_25.jpg.jpeg"><div class="photo-date">Junio 2025</div></div>
+                <div class="photo-card" style="--r: 3deg"><img src="julio_25.jpg.jpeg"><div class="photo-date">Julio 2025</div></div>
+                <div class="photo-card" style="--r: -1deg"><img src="agosto_25.jpg.jpeg"><div class="photo-date">Agosto 2025</div></div>
+                <div class="photo-card" style="--r: 1deg"><img src="sep_25.jpg.jpeg"><div class="photo-date">Septiembre 2025</div></div>
+                <div class="photo-card" style="--r: -1deg"><img src="octubre_25.jpg.jpeg"><div class="photo-date">Octubre 2025</div></div>
+                <div class="photo-card" style="--r: -2deg"><img src="nov_25.jpg.jpeg"><div class="photo-date">Noviembre 2025</div></div>
+                <div class="photo-card" style="--r: 2deg"><img src="dic_25.jpg.jpeg"><div class="photo-date">Diciembre 2025</div></div>
+                <div class="photo-card" style="--r: -3deg"><img src="enero_26.jpg.jpeg"><div class="photo-date">Enero 2026</div></div>
+                <div class="photo-card" style="--r: 3deg"><img src="febrero_26.jpg.jpeg"><div class="photo-date">Febrero 2026</div></div>
+            </div>
+        </section>
 
-    <section class="final-call">
-        <button class="btn-valentine" onclick="openModal()">¿Quieres ser mi San Valentín?</button>
-    </section>
+        <section class="final-call">
+            <button class="btn-valentine" onclick="openModal()">¿Quieres ser mi San Valentín?</button>
+        </section>
+    </div>
 
     <div id="dateModal" class="modal">
         <div class="modal-content">
-            <span class="close-btn" onclick="closeModal()">&times;</span>
-            <h2>¡Dijo que sí! ❤️</h2>
+            <span style="position:absolute; top:15px; right:20px; cursor:pointer;" onclick="closeModal()">&times;</span>
+            <h2 style="font-family: 'Dancing Script', cursive; font-size: 3rem; color: var(--accent);">¡Dijo que sí! ❤️</h2>
             <p><strong>Nuestra Cita:</strong></p>
             <p>📍 Lugar: Ganchos Puerto Santa Ana </p>
             <p>⏰ Hora: 06:00 PM</p>
             <p>👗 Dress Code: Casual ropa Azul </p>
-            <p><i>Una cita para celebrar nuestro amor, te amo.</i></p>
+            <p><i>Te amo muchísimo.</i></p>
         </div>
     </div>
 
     <script>
-        // --- CONFIGURACIÓN ---
         const fechaInicio = new Date('2025-02-16T00:00:00'); 
-        const mensajeTexto = "Este año ha sido un año espectacular gracias a ti, soy tan feliz a tu lado y cada día que pasa agradezco de que siempre estes ahí para mi. Te amo un montón mi niña hermosa y espero yo también hacerte tan feliz como tú me haces a mi.";
+        const passwordCorrecta = "6/9/2024"; 
+        const mensajeTexto = "Este año ha sido un año espectacular gracias a ti, soy tan feliz a tu lado y cada día que pasa agradezco de que siempre estés ahí para mí. Te amo un montón mi niña hermosa y espero yo también hacerte tan feliz como tú me haces a mí.";
 
-        // --- MÚSICA ---
-        const audio = document.getElementById('bgMusic');
-        function toggleMusic() {
-            if (audio.paused) {
-                audio.play();
-                document.getElementById('musicBtn').innerHTML = "⏸️";
+        function validarAcceso() {
+            const userPass = document.getElementById('passInput').value.trim();
+            const authBox = document.getElementById('authBox');
+
+            if (userPass === passwordCorrecta) {
+                document.getElementById('splash-screen').style.opacity = '0';
+                setTimeout(() => {
+                    document.getElementById('splash-screen').style.display = 'none';
+                    document.getElementById('main-content').style.display = 'block';
+                    document.getElementById('bgMusic').play().catch(() => {});
+                    drawDenseTree();
+                    type();
+                    // Mostrar la pareja después de un momento
+                    setTimeout(() => { document.getElementById('couple').style.opacity = '1'; }, 2000);
+                }, 1000);
             } else {
-                audio.pause();
-                document.getElementById('musicBtn').innerHTML = "🎵";
+                authBox.classList.add('shake');
+                setTimeout(() => authBox.classList.remove('shake'), 500);
+                alert("Respuesta incorrecta... piensa bien en ese día especial.");
             }
         }
-        // Iniciar música al primer click del usuario
-        document.body.addEventListener('click', () => {
-            if (audio.paused) {
-                audio.play();
-                document.getElementById('musicBtn').innerHTML = "⏸️";
-            }
-        }, { once: true });
 
-        // --- MÁQUINA DE ESCRIBIR ---
         let idx = 0;
         function type() {
             if (idx < mensajeTexto.length) {
@@ -220,7 +222,6 @@
             }
         }
 
-        // --- ÁRBOL DE CORAZONES ---
         const canvas = document.getElementById('treeCanvas');
         const ctx = canvas.getContext('2d');
         canvas.width = 500; canvas.height = 550;
@@ -244,14 +245,12 @@
 
         function drawHeartShape(x, y, size, color) {
             ctx.fillStyle = color;
-            ctx.beginPath();
-            ctx.moveTo(x, y);
+            ctx.beginPath(); ctx.moveTo(x, y);
             ctx.bezierCurveTo(x-size, y-size, x-size*2, y+size/3, x, y+size);
             ctx.bezierCurveTo(x+size*2, y+size/3, x+size, y-size, x, y);
             ctx.fill();
         }
 
-        // --- CONTADOR ---
         function updateCounter() {
             const now = new Date();
             const diff = now - fechaInicio;
@@ -275,12 +274,10 @@
             setTimeout(() => h.remove(), 6000);
         }
 
-        window.onload = () => {
-            drawDenseTree();
-            setTimeout(type, 1000);
-            setInterval(updateCounter, 1000);
-            setInterval(spawnHeart, 400);
-        };
+        setInterval(updateCounter, 1000);
+        setInterval(spawnHeart, 400);
+
+        document.getElementById('passInput').addEventListener('keypress', (e) => { if (e.key === 'Enter') validarAcceso(); });
     </script>
 </body>
 </html>
