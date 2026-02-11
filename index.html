@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para el amor de mi vida</title>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;700&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #f5e8d7;
+            --text-color: #4a3728;
+            --accent: #ff4d6d;
+        }
+
+        body {
+            margin: 0;
+            /* FONDO ANIMADO DEGRADADO */
+            background: linear-gradient(-45deg, #f5e8d7, #ffdde1, #ee9ae5, #f5e8d7);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            font-family: 'Quicksand', sans-serif;
+            color: var(--text-color);
+            overflow-x: hidden;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* --- SECCIÓN 1: EL ÁRBOL --- */
+        .hero-section {
+            height: 100vh;
+            display: flex;
+            position: relative;
+            padding: 0 5%;
+            align-items: center;
+        }
+
+        .text-content { flex: 1; z-index: 10; }
+        .tree-content { flex: 1; display: flex; justify-content: center; align-items: center; }
+        #treeCanvas { max-width: 100%; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.1)); }
+        
+        h1 { font-size: 2.5rem; margin-bottom: 20px; font-weight: 500; }
+        .typewriter { font-size: 1.6rem; line-height: 1.5; min-height: 150px; }
+
+        .uptime-footer { position: absolute; bottom: 40px; left: 5%; }
+        .uptime-display { font-size: 2.2rem; font-weight: 700; color: #c9184a; }
+        .unit { font-size: 0.9rem; font-weight: 400; margin-right: 10px; color: var(--text-color); }
+
+        /* --- SECCIÓN 2: LÍNEA DE TIEMPO --- */
+        .timeline-section { padding: 80px 5%; background: rgba(255, 255, 255, 0.2); }
+        .timeline-title { text-align: center; font-family: 'Dancing Script', cursive; font-size: 3.5rem; margin-bottom: 50px; color: var(--accent); }
+        .timeline-scroll { display: flex; overflow-x: auto; gap: 30px; padding: 20px; scroll-behavior: smooth; }
+        .photo-card { min-width: 300px; background: white; padding: 15px 15px 40px 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); transform: rotate(var(--r)); transition: 0.3s; }
+        .photo-card img { width: 100%; height: 250px; object-fit: cover; }
+        .photo-date { font-family: 'Dancing Script', cursive; font-size: 1.8rem; text-align: center; margin-top: 15px; }
+
+        /* --- SECCIÓN 3: EL BOTÓN FINAL --- */
+        .final-call {
+            text-align: center;
+            padding: 100px 20px;
+        }
+
+        .btn-valentine {
+            background-color: var(--accent);
+            color: white;
+            border: none;
+            padding: 20px 40px;
+            font-size: 1.8rem;
+            font-family: 'Dancing Script', cursive;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 10px 20px rgba(255, 77, 109, 0.3);
+            transition: transform 0.3s, background-color 0.3s;
+        }
+
+        .btn-valentine:hover {
+            transform: scale(1.1);
+            background-color: #c9184a;
+        }
+
+        /* --- VENTANA EMERGENTE (MODAL) --- */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0; top: 0; width: 100%; height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background-color: var(--bg-color);
+            margin: 10% auto;
+            padding: 40px;
+            border-radius: 20px;
+            width: 80%;
+            max-width: 500px;
+            text-align: center;
+            border: 3px solid var(--accent);
+            position: relative;
+        }
+
+        .modal-content h2 { font-family: 'Dancing Script', cursive; font-size: 3rem; color: var(--accent); }
+        .modal-content p { font-size: 1.2rem; line-height: 1.6; }
+        .close-btn { position: absolute; top: 15px; right: 20px; font-size: 1.5rem; cursor: pointer; }
+
+        .falling-heart { position: fixed; top: -20px; z-index: 100; pointer-events: none; animation: fall linear forwards; }
+        @keyframes fall { to { transform: translateY(105vh) rotate(360deg); } }
+
+        /* Botón de música opcional si no arranca solo */
+        .music-control {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1001;
+            background: white;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            font-size: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <audio id="bgMusic" loop>
+        <source src="musica.mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="music-control" id="musicBtn" onclick="toggleMusic()">🎵</div>
+
+    <section class="hero-section">
+        <div class="text-content">
+            <h1>Para el amor de mi vida:</h1>
+            <div id="typewriter" class="typewriter"></div>
+            <div class="uptime-footer">
+                <div style="opacity:0.8; margin-bottom:5px;">Mi amor por ti comenzó hace...</div>
+                <div id="uptime" class="uptime-display"></div>
+            </div>
+        </div>
+        <div class="tree-content">
+            <canvas id="treeCanvas"></canvas>
+        </div>
+    </section>
+
+    <section class="timeline-section">
+        <h2 class="timeline-title">Nuestra Historia...</h2>
+        <div class="timeline-scroll">
+            <div class="photo-card" style="--r: 3deg"><img src="febrero_25.jpg.jpeg"><div class="photo-date">Febrero 2025</div></div>
+            <div class="photo-card" style="--r: -1deg"><img src="marzo_25.jpg.jpeg"><div class="photo-date">Marzo 2025</div></div>
+            <div class="photo-card" style="--r: 1deg"><img src="abril_25.jpg.jpeg"><div class="photo-date">Abril 2025</div></div>
+            <div class="photo-card" style="--r: -2deg"><img src="mayo_25.jpg.jpeg"><div class="photo-date">Mayo 2025</div></div>
+            <div class="photo-card" style="--r: 2deg"><img src="junio_25.jpg.jpeg"><div class="photo-date">Junio 2025</div></div>
+            <div class="photo-card" style="--r: 3deg"><img src="julio_25.jpg.jpeg"><div class="photo-date">Julio 2025</div></div>
+            <div class="photo-card" style="--r: -1deg"><img src="agosto_25.jpg.jpeg"><div class="photo-date">Agosto 2025</div></div>
+            <div class="photo-card" style="--r: 1deg"><img src="sep_25.jpg.jpeg"><div class="photo-date">Septiembre 2025</div></div>
+            <div class="photo-card" style="--r: -1deg"><img src="octubre_25.jpg.jpeg"><div class="photo-date">Octubre 2025</div></div>
+            <div class="photo-card" style="--r: -2deg"><img src="nov_25.jpg.jpeg"><div class="photo-date">Noviembre 2025</div></div>
+            <div class="photo-card" style="--r: 2deg"><img src="dic_25.jpg.jpeg"><div class="photo-date">Diciembre 2025</div></div>
+            <div class="photo-card" style="--r: -3deg"><img src="enero_26.jpg.jpeg"><div class="photo-date">Enero 2026</div></div>
+            <div class="photo-card" style="--r: 3deg"><img src="febrero_26.jpg.jpeg"><div class="photo-date">Febrero 2026</div></div>
+        </div>
+    </section>
+
+    <section class="final-call">
+        <button class="btn-valentine" onclick="openModal()">¿Quieres ser mi San Valentín?</button>
+    </section>
+
+    <div id="dateModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <h2>¡Dijo que sí! ❤️</h2>
+            <p><strong>Nuestra Cita:</strong></p>
+            <p>📍 Lugar: Ganchos Puerto Santa Ana </p>
+            <p>⏰ Hora: 06:00 PM</p>
+            <p>👗 Dress Code: Casual ropa Azul </p>
+            <p><i>Una cita para celebrar nuestro amor, te amo.</i></p>
+        </div>
+    </div>
+
+    <script>
+        // --- CONFIGURACIÓN ---
+        const fechaInicio = new Date('2025-02-16T00:00:00'); 
+        const mensajeTexto = "Este año ha sido un año espectacular gracias a ti, soy tan feliz a tu lado y cada día que pasa agradezco de que siempre estes ahí para mi. Te amo un montón mi niña hermosa y espero yo también hacerte tan feliz como tú me haces a mi.";
+
+        // --- MÚSICA ---
+        const audio = document.getElementById('bgMusic');
+        function toggleMusic() {
+            if (audio.paused) {
+                audio.play();
+                document.getElementById('musicBtn').innerHTML = "⏸️";
+            } else {
+                audio.pause();
+                document.getElementById('musicBtn').innerHTML = "🎵";
+            }
+        }
+        // Iniciar música al primer click del usuario
+        document.body.addEventListener('click', () => {
+            if (audio.paused) {
+                audio.play();
+                document.getElementById('musicBtn').innerHTML = "⏸️";
+            }
+        }, { once: true });
+
+        // --- MÁQUINA DE ESCRIBIR ---
+        let idx = 0;
+        function type() {
+            if (idx < mensajeTexto.length) {
+                document.getElementById('typewriter').innerHTML += mensajeTexto.charAt(idx);
+                idx++;
+                setTimeout(type, 60);
+            }
+        }
+
+        // --- ÁRBOL DE CORAZONES ---
+        const canvas = document.getElementById('treeCanvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = 500; canvas.height = 550;
+
+        function drawDenseTree() {
+            ctx.fillStyle = '#5d4037';
+            ctx.fillRect(245, 420, 10, 130);
+            for (let i = 0; i < 1400; i++) {
+                setTimeout(() => {
+                    const t = Math.random() * 2 * Math.PI;
+                    const r = Math.sqrt(Math.random()); 
+                    const x = 16 * Math.pow(Math.sin(t), 3) * r;
+                    const y = -(13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t)) * r;
+                    const posX = 250 + x * 12;
+                    const posY = 250 + y * 12;
+                    const colors = ['#ff4d6d', '#ff758c', '#c9184a', '#ff0a54', '#fae1dd'];
+                    drawHeartShape(posX, posY, 4 + Math.random() * 8, colors[Math.floor(Math.random()*5)]);
+                }, i * 1);
+            }
+        }
+
+        function drawHeartShape(x, y, size, color) {
+            ctx.fillStyle = color;
+            ctx.beginPath();
+            ctx.moveTo(x, y);
+            ctx.bezierCurveTo(x-size, y-size, x-size*2, y+size/3, x, y+size);
+            ctx.bezierCurveTo(x+size*2, y+size/3, x+size, y-size, x, y);
+            ctx.fill();
+        }
+
+        // --- CONTADOR ---
+        function updateCounter() {
+            const now = new Date();
+            const diff = now - fechaInicio;
+            const d = Math.floor(diff / 86400000);
+            const h = Math.floor((diff % 86400000) / 3600000);
+            const m = Math.floor((diff % 3600000) / 60000);
+            const s = Math.floor((diff % 60000) / 1000);
+            document.getElementById('uptime').innerHTML = `${d}<span class="unit">días</span>${h}<span class="unit">h</span>${m}<span class="unit">m</span>${s}<span class="unit">s</span>`;
+        }
+
+        function openModal() { document.getElementById('dateModal').style.display = "block"; }
+        function closeModal() { document.getElementById('dateModal').style.display = "none"; }
+
+        function spawnHeart() {
+            const h = document.createElement('div');
+            h.classList.add('falling-heart');
+            h.innerHTML = '❤️';
+            h.style.left = Math.random() * 100 + 'vw';
+            h.style.animationDuration = (Math.random() * 3 + 3) + 's';
+            document.body.appendChild(h);
+            setTimeout(() => h.remove(), 6000);
+        }
+
+        window.onload = () => {
+            drawDenseTree();
+            setTimeout(type, 1000);
+            setInterval(updateCounter, 1000);
+            setInterval(spawnHeart, 400);
+        };
+    </script>
+</body>
+</html>
